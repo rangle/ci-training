@@ -57,7 +57,7 @@ which adds a robust translation workflow to Angular. The Angular Translate
 workflow looks like
   
   
-![Angular Translate Workflow]:(img/i18n-process.svg "i18n Workflow")
+![Angular Translate Workflow](img/i18n-process.svg "i18n Workflow")
 
 
 [ngTranslate]:https://github.com/angular-translate/angular-translate "Angular Translate Module"
