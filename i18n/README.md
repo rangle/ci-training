@@ -79,7 +79,59 @@ quite the same as monolingual HTML.  There are a variety of reasons for this:
 - Designers/Developers do not necessarily know the target languages
 - Translators require _context_ in order to produce high quality translations
 
+Here is some HTML, and JS for a [simple Angular translate demo][demoBasic]
+HTML:
+
+```html
+
+    <div ng-app="translateDemo">
+      <h1>{{ 'TITLE' | translate }}</h1>
+      <p>{{ 'BODY' | translate }}</p>
+  
+        <select ng-controller="DemoLang as lang"
+                ng-model="lang.current"
+                ng-change="lang.change(lang.current)">
+        <option value='en'>English</option>
+        <option value='fr'>French</option>
+      </select>
+    </div>
+
+```
+
+JS:
+
+```js
+
+    angular.module('translateDemo', ['pascalprecht.translate']).
+
+    config(function($translateProvider) {
+
+      $translateProvider.useSanitizeValueStrategy('escape');
+
+      $translateProvider.determinePreferredLanguage();
+      $translateProvider.translations('en', {
+        TITLE: 'My Cool Demo',
+        BODY: 'In English, and French'
+      });
+
+      $translateProvider.translations('fr', {
+        TITLE: 'Ma Démo Fraîche',
+        BODY: 'En anglais et en français'
+      })
+    }).
+
+    controller('DemoLang', function($translate) {
+      this.current = $translate.use();
+      this.change = $translate.use;
+  
+      // "normalize" auto-detected language for example 'en_US' becomes 'en'
+      if (this.current.length > 2) {
+        this.current = this.current.slice(0, 2);
+        $translate.use(this.current);
+     }
+    });
+```
 
 
 [ngTranslate]:https://github.com/angular-translate/angular-translate "Angular Translate Module"
-
+[demoBasic]:http://codepen.io/bennett000/pen/PPrEve/ "Simple English/French Angular Translate Example"
