@@ -79,7 +79,7 @@ quite the same as monolingual HTML.  There are a variety of reasons for this:
 - Designers/Developers do not necessarily know the target languages
 - Translators require _context_ in order to produce high quality translations
 
-Here is some HTML, and JS for a [simple Angular translate demo][demoBasic]
+Here is some HTML, and JS for a [simple Angular translate demo][demoBasic],
 HTML:
 
 ```html
@@ -106,14 +106,39 @@ JS:
 
     config(function($translateProvider) {
 
+      // angular translate provides a number of mechanisms for preventing
+      // a number of possible exploits
       $translateProvider.useSanitizeValueStrategy('escape');
 
-      $translateProvider.determinePreferredLanguage();
-      $translateProvider.translations('en', {
+      // angular translate will attempt to determine the user's preferred 
+      // language by itself
+      $translateProvider.determinePreferredLanguage(
+          // a custom callback function could be provided here to do extra
+          // language detection
+      );
+      
+      // angular translate will likely get a language, *and* locale for example
+      // 'fr_FR' or 'fr_CA' are specific French locales, and  'en_US', or 
+      // 'en_GB' are specific English locales.  In many cases it is desirable to
+      // simply use 'fr', or 'en'.  Angular translate make this possible:
+      $translateProvider.registerAvailableLanguageKeys(['fr', 'en'], {
+        'fr_ca': 'fr',
+        'fr_fr': 'fr',
+        'fr_ch': 'fr',
+        'en_US': 'en',
+        'en_GB': 'en',
+        'en_CA': 'en'
+      });
+      
+      // in a real application this data would come from the server, and/or be
+      // packaged into the application as a build step
+      $translateProvider.translations('en', { 
         TITLE: 'My Cool Demo',
         BODY: 'In English, and French'
       });
 
+      // in a real application this data would come from the server, and/or be
+      // packaged into the application as a build step
       $translateProvider.translations('fr', {
         TITLE: 'Ma Démo Fraîche',
         BODY: 'En anglais et en français'
@@ -123,12 +148,6 @@ JS:
     controller('DemoLang', function($translate) {
       this.current = $translate.use();
       this.change = $translate.use;
-  
-      // "normalize" auto-detected language for example 'en_US' becomes 'en'
-      if (this.current.length > 2) {
-        this.current = this.current.slice(0, 2);
-        $translate.use(this.current);
-     }
     });
 ```
 
