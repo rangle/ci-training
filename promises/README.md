@@ -10,6 +10,7 @@ that are not available until some point in the future.
 In synchronous JavaScript code the future always happens after the next line of
 code runs. 
 
+```js
 
     var x;
     
@@ -18,7 +19,7 @@ code runs.
     x = 5;
     
     console.log(x);
-    
+```    
     
 The above example will output:
 
