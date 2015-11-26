@@ -48,7 +48,7 @@ Consider the following:
 
 ## i18n in Angular (1.4+)
 
-- Starts, and ends with HTML templates
+- Starts, and ends with HTML templates, and/or JSON
 - Can be done dynamically (no page reloads)
 - Styles can be tested _while_ translators translate
 
@@ -58,6 +58,27 @@ workflow looks like
   
   
 ![Angular Translate Workflow](img/i18n-process.png "i18n Workflow")
+
+In the workflow diagram the smiling face represents the translators.  There is
+also a computer tower represented as a translator.  The best practice is to
+have the development/design team work in their native language, _and_ a made
+up "gibberish" language. 
+
+This practice evolved out of the fact that _good_ translation takes time.
+However, as was illustrated in the previous section, translations _will likely_
+affect application layout.  The "gibberish" language can be generated as a
+build step, and development/design can get near instant feedback on how
+localization will affect the application.
+
+### i18n Angular HTML Templates
+
+Workflow begins, and ends with HTML, or in some cases JSON.  This HTML is _not_
+quite the same as monolingual HTML.  There are a variety of reasons for this:
+
+- Translators do not necessarily know Angular, or HTML
+- Designers/Developers do not necessarily know the target languages
+- Translators require _context_ in order to produce high quality translations
+
 
 
 [ngTranslate]:https://github.com/angular-translate/angular-translate "Angular Translate Module"
