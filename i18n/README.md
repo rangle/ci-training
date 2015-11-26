@@ -48,7 +48,7 @@ Consider the following:
 
 ## i18n in Angular (1.4+)
 
-- Starts, and ends with HTML templates, and/or JSON
+- Starts, and ends with HTML templates, and JSON
 - Can be done dynamically (no page reloads)
 - Styles can be tested _while_ translators translate
 
@@ -72,12 +72,15 @@ localization will affect the application.
 
 ### i18n Angular HTML Templates
 
-Workflow begins, and ends with HTML, or in some cases JSON.  This HTML is _not_
-quite the same as monolingual HTML.  There are a variety of reasons for this:
+Workflow begins, and ends with HTML, and JSON.  This HTML is _not_ quite the 
+same as monolingual HTML.  There are a variety of reasons for this:
 
 - Translators do not necessarily know Angular, or HTML
 - Designers/Developers do not necessarily know the target languages
 - Translators require _context_ in order to produce high quality translations
+
+Before proceeding the angular-translate JavaScript will need to be added to
+a project. This can be done through `npm`, or through a [cdn][cdnAt]
 
 Here is some HTML, and JS for a [simple Angular translate demo][demoBasic],
 HTML:
@@ -151,6 +154,129 @@ JS:
     });
 ```
 
+The above code requires a few extra JavaScript libraries to work, and is one of
+the simplest possible translation examples available.  The above code works well
+for very basic translations, but it does _not_ solve issues like pluralization,
+or gender.
 
-[ngTranslate]:https://github.com/angular-translate/angular-translate "Angular Translate Module"
+Pluralization, and gender have been translation problems for _years_.  
+Consequently there are already existing tools that help with translation. 
+Angular translate makes use of the [ICU Message Format][icu] which allows for
+many translator friendly features that will help translators produce high
+quality translations.
+
+Compared to basic translations, working with Message Format requires _several_
+more JavaScript dependencies:
+
+- Message Format itself needs to be included ([cdn][cdnMf])
+- Angular Translate ([cdn][cdnAt])
+- Angular's Message Format wrapper ([cdn][cdnAmf])
+- Angular Translate's Message Format Interpolater ([cdn][cdnAtimf])
+- Message format locales for each used language
+
+Angular translate provides even more advanced options though, 
+[this gender demo][demoGender] which has HTML that looks like:
+
+```html
+
+    <div ng-app="translateDemo" ng-controller="DemoGender as gender">
+      <h1>{{ 'TITLE' | translate }}</h1>
+      <p>{{ 'P1' | translate }}</p>
+      <p translate='P2'
+         translate-values="{ GENDER: gender.current }"
+         translate-interpolation="messageformat"></p>
+      
+        <select 
+                ng-controller="DemoLang as lang"
+                ng-model="lang.current"
+                ng-change="lang.change(lang.current)">
+          <option value='en'>English</option>
+          <option value='fr'>French</option>
+        </select>
+      <select ng-model="gender.current">
+        <option value='female'>Female</option>
+        <option value='male'>Male</option>
+        <option value='other'>Other
+        </option>
+      </select>
+    </div>
+```
+
+The JavaScript looks like:
+
+```js
+
+        angular.module('translateDemo', ['pascalprecht.translate', 'ngMessageFormat']).
+    
+        config(function($translateProvider) {
+    
+          // angular translate provides a number of mechanisms for preventing
+          // a number of possible exploits
+          $translateProvider.useSanitizeValueStrategy('escape');
+    
+          // angular translate will attempt to determine the user's preferred 
+          // language by itself
+          $translateProvider.determinePreferredLanguage(
+            // a custom callback function could be provided here to do extra
+            // language detection
+          );
+    
+          // angular translate will likely get a language, *and* locale for example
+          // 'fr_FR' or 'fr_CA' are specific French locales, and  'en_US', or 
+          // 'en_GB' are specific English locales.  In many cases it is desirable to
+          // simply use 'fr', or 'en'.  Angular translate make this possible:
+          $translateProvider.registerAvailableLanguageKeys(['fr', 'en'], {
+            'fr_ca': 'fr',
+            'fr_fr': 'fr',
+            'fr_ch': 'fr',
+            'en_US': 'en',
+            'en_GB': 'en',
+            'en_CA': 'en'
+          });
+          
+          // message format follows ICU recommendations.  Unfortunately it 
+          // has a *different* interpolation format than Angular.  By adding
+          // interpolations, special message format interpolations can be used
+          // as needed, while still allowing default Angular interpolations
+          $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
+    
+          // in a real application this data would come from the server, and/or be
+          // packaged into the application as a build step
+          $translateProvider.translations('en', {
+            TITLE: 'My Cool Demo',
+            P1: 'In English, and French',
+            P2: '{GENDER, select, female{she is} male{he is} other {they are}} talented'
+          });
+    
+          // in a real application this data would come from the server, and/or be
+          // packaged into the application as a build step
+          $translateProvider.translations('fr', {
+            TITLE: 'Ma Démo Fraîche',
+            P1: 'En anglais et en français',
+            P2: '{GENDER, select, female{elle est} male{il est} other {ils sont}} talentueuse'
+          })
+        }).
+    
+        controller('DemoLang', function($translate) {
+          this.current = $translate.use();
+          this.change = $translate.use;
+        }).
+        
+        controller('DemoGender', function () {
+          this.current = 'female';
+        });
+```
+
+There is not really _that_ much different between the ICU capable demo, and the
+basic demo in terms of JavaScript. The differences are really in the way the
+HTML messages are formatted.
+
+
+[cdnAtimf]:https://cdnjs.cloudflare.com/ajax/libs/angular-translate-interpolation-messageformat/2.8.1/angular-translate-interpolation-messageformat.js "Angular Translate Interpolation Message Format CDN"
+[cdnAmf]:https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-message-format.js "Angular Message Format Wrapper CDN"
+[cdnMf]:https:https://cdn.rawgit.com/SlexAxton/messageformat.js/0.2.2/messageformat.js "Message Format CDN"
+[cdnAt]:https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.8.1/angular-translate.js "Angular Translate CDN"
+[icu]:http://site.icu-project.org/ "International Components For Unicode"
+[demoGender]:http://krebsonsecurity.com/2011/08/beware-of-juice-jacking/ "Gender based example"
 [demoBasic]:http://codepen.io/bennett000/pen/PPrEve/ "Simple English/French Angular Translate Example"
+[ngTranslate]:https://github.com/angular-translate/angular-translate "Angular Translate Module"
