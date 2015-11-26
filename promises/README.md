@@ -29,6 +29,7 @@ The above example will output:
 This example is not exciting, and is very straight forward. Adding functions to
 the example change things a little bit.
 
+```js
 
     var x;
     
@@ -43,6 +44,7 @@ the example change things a little bit.
     setX();
     
     console.log(x);
+```
     
     
 Now the output will be:
@@ -96,6 +98,8 @@ Callback functions happen at some point in the future.  Sometimes this future
 might be synchronous, like so:
 
 
+```js
+
     function getXLater(callback) {
         var x = 5;
         callback(x);
@@ -111,6 +115,7 @@ might be synchronous, like so:
     });
     
     console.log(getX());
+```
     
 This example will output:
 
@@ -123,6 +128,8 @@ then JavaScript is left waiting.
 
 A JavaScript engine will walk through the previous example like so:
 
+
+```js
 
     function getXLater(callback) {   // 1.  define a function
         var x = 5;                   // 4.  set a local variable 'x' to 5
@@ -142,10 +149,13 @@ A JavaScript engine will walk through the previous example like so:
     
     console.log(getX());             // 8.  invoke getX
                                      // 11. log the result of getX to console
+```
                                      
 
 Because functions can also be variables, this example can also be written like
 so:
+
+```js
 
     function getXLater(callback) {   // 1.  define a function
         var x = 5;                   // 5.  set a local variable 'x' to 5
@@ -167,12 +177,15 @@ so:
     console.log(getX());             // 8.  invoke getX
                                      // 11. log the result of getX to console
                                      
+```
+                      
 All of this is still synchronous, and relatively easy to reason about even
 though the code twists, and turns.  Adding an asynchronous event to this will
 start to make the example more complex.
 
 The same example with `getAnotherX` written in asynchronous form:
 
+```js
 
     function getXLater(callback) {
         var x = 5;
@@ -191,6 +204,7 @@ The same example with `getAnotherX` written in asynchronous form:
     });
     
     console.log(getX());
+```
     
 This time the output of the program is:
 
@@ -200,6 +214,8 @@ This time the output of the program is:
 So what happened? A JavaScript engine will walkthrough the previous example
 like so:
 
+
+```js
 
     function getXLater(callback) {  // 1.  define getXLater function   
         var x = 5;                  // 4.  define a local variable 'x' as 5
@@ -225,6 +241,7 @@ like so:
                                     // 9.  log 'x' to console (3)
                                     // 10. there is no more code to run,
                                     //     JavaScript will wait on its own
+```                                   
                                    
 Using a timeout event caused the example program to run `getXLater`'s callback
 _asynchronously_.  JavaScript's timer events let the programmer place things in
@@ -234,6 +251,8 @@ This example is very contrived, but it does start to illustrate how confusing
 asynchronous functions can be.  In real world code these traditional callback
 patterns can quickly become hard to read, and hard to maintain.  Consider the
 following:
+
+```js
 
     function getFromServer(resource, id, callback) {
         // gets some resource from the server (implementation not shown)
@@ -268,6 +287,7 @@ following:
         }
         displayPhoto(photo);
     });
+```
     
     
 In this example there is no output.  The example attempts to show how easily
@@ -303,6 +323,8 @@ instead attached to a promise _returned from the invoked function_.
 
 Here is the last callback example written with promises:
 
+```js
+
     function getFromServer(resource, id) {
         // gets some resource from the server (implementation not shown)
         // ...
@@ -327,7 +349,7 @@ Here is the last callback example written with promises:
     getFavouritePhoto('pat').then(displayPhoto, function (err) {
         // show an error message
     });
-    
+```
     
 Already this example improves the readability of callbacks by forcing the
 programmer to work with them _as return values_ instead of as parameters.  This
@@ -335,6 +357,8 @@ can have dramatic improvements on readability, and on refactorability.
 
 The above example could be refactored to look like:
 
+
+```js
 
     function getFromServer(resource, id) {
         // gets some resource from the server (implementation not shown)
@@ -363,6 +387,8 @@ The above example could be refactored to look like:
         // show an error message
     });
     
+```
+    
 This code has less nesting, is easier to read, and the functions can all be used
 by _other_ code more easily.
 
@@ -377,6 +403,6 @@ involve an `if` block.
 
 ### Error Handling
 
-### Porgress Uppdates
+### Progress Updates
 
 ### Real world examples
