@@ -397,12 +397,123 @@ _depended_ on a convention that programmers would have to know.  In the promise
 example there is only _one_ part of code that handles errors, and it does not
 involve an `if` block.
 
+
 ## Working With Promises
 
-### Defers
+So far the examples have started with functions that already return promises.
+This is great, but sometimes developers need to write functions that make
+new promises.
 
-### Error Handling
+Historically there have been many different types of promises in JavaScript.
+Fortunately the third party library vendors largely standardized promise
+interfaces, and promises are a native feature of the next version of JavaScript.
 
-### Progress Updates
+The examples here will use Angular 1.x's `$q` promise library.  Starting a
+promise with `$q` is as simple as this:
 
-### Real world examples
+```js
+
+    // This is a basic/limited clone of Angular's 1.x's $timeout object
+    
+    function runLater(fn, delay) { 
+        var newPromise = $q(function (resolve, reject) {
+            // this is for demonstration purposes, in Angular 1.x use $timeout
+            setTimeout(function () {
+                try {
+                  resolve(fn());
+                } catch (err) {
+                  reject(err); 
+                }
+            }, delay);
+        });
+        return newPromise;
+    }
+    
+    // basic usage:
+    runLater(function () { 
+      return 5;
+    }, 5000).then(function (result) {
+        return result === 5; // true
+    });
+    
+```
+
+The above example is an incomplete clone of Angular's built in $timeout
+function, along with a simple usage example.  The relevant part for creating
+promises is:
+
+```js
+
+    var newPromise = $q(function (resolve, reject) {
+    });
+    
+```
+
+The `$q` object happens to also be a function.  When `$q` is used as a function
+it takes a callback function as its first argument, and it returns a promise.
+
+The callback function passed to `$q(callback)` takes two parameters, resolve,
+and reject.  Both resolve, and reject are functions.  
+
+- `resolve` takes zero or more parameters, and parameters passed to 
+`resolve(p1, p2, ...)` show up in _the next_ then function.
+
+- `reject` usually takes one parameter, typically an `Error` object, which 
+shows up in _the next_ error handling function, which conveniently, can be at
+the end of the promise chain
+
+## Error Handling
+
+Error handling in promises can be a little non-intuitive at first.  One easy
+way to think about error handling in promises is this: a function passed to
+a `then` method can do one of two things:
+
+- it can return a value
+- it can throw an exception
+
+Exceptions that are thrown get _immediately_ passed to the next error handler
+in the promise chain.  There is no traditional catching.  For example:
+
+```js
+
+function fetchFromServer(resource) {
+   // returns a promise, probably from $http 
+}
+
+// This try/catch is an example of what *not* to do
+try {
+    fetchFromServer('friendList').
+    then(function () {
+        throw new Error('test error message');
+    }).
+    then(function (result) {
+        // this will never run
+        return result;
+    }).
+    then(function () {
+        // this will never run
+        return result;
+    }, function (err) {
+       console.log(err.message); // will output "test error message"
+    });
+} catch (err) {
+  // this will never run
+}
+
+```
+
+Internally the promise mechanism deals with capturing exceptions, and forwarding
+them along the promise chain, _skipping_ functions that occur _later_ in the 
+promise chain.
+
+_Sometimes_ this skipping is desirable, but other times it is not.  In the rare
+events where a promise chain _must_ continue, promises can be handled earlier
+in the chain.
+
+
+## Real world examples
+
+With respect to client side JavaScript programming, promises can really make a
+big difference with network requests. In many cases network requests can end up
+depending on results from _previous_ network requests, and traditional callback
+models make this complex to deal with.
