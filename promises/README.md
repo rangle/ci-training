@@ -517,3 +517,7 @@ With respect to client side JavaScript programming, promises can really make a
 big difference with network requests. In many cases network requests can end up
 depending on results from _previous_ network requests, and traditional callback
 models make this complex to deal with.
+
+Another area where promises can come
+
+

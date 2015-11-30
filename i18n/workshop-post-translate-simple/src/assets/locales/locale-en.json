@@ -1,0 +1,46 @@
+{
+  "Nav": {
+    "HOME":"Home",
+    "ABOUT":"About",
+    "CONTACT":"Contact",
+    "GULP":"Gulp Angular",
+    "CREATED":"Application was created"
+  },
+  "Index": {
+    "TITLE":"workshop",
+    "HEADER":"'Allo, 'Allo!",
+    "WARNING":"You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/\">upgrade your browser</a> to improve your experience.",
+    "YEOMAN":"Always a pleasure scaffolding your apps.",
+    "THANKS":"With ♥ thanks to the contributions of"
+  },
+  "WebDev": {
+    "AngularJS": {
+      "TITLE":"AngularJS",
+      "DESC":"HTML enhanced for web apps!"
+    },
+    "BrowserSync": {
+      "TITLE":"BrowserSync",
+      "DESC":"Time-saving synchronised browser testing."
+    },
+    "GulpJS": {
+      "TITLE":"GulpJS",
+      "DESC":"The streaming build system."
+    },
+    "Jasmine": {
+      "TITLE":"Jasmine",
+      "DESC":"Behavior-Driven JavaScript."
+    },
+    "Karma": {
+      "TITLE":"Karma",
+      "DESC":"Spectacular Test Runner for JavaScript."
+    },
+    "Protractor": {
+      "TITLE":"Protractor",
+      "DESC":"End to end test framework for AngularJS applications built on top of WebDriverJS."
+    }
+  },
+  "Locale": {
+    "EN": "English",
+    "GB": "Gibberish"
+  }
+}

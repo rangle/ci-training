@@ -1,1 +1,2 @@
-i18n/workshop/node_modules
+node_modules
+bower_components

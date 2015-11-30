@@ -9,39 +9,39 @@
   function webDevTec() {
     var data = [
       {
-        'title': 'AngularJS',
+        'title': 'WebDev.AngularJS.TITLE',
         'url': 'https://angularjs.org/',
-        'description': 'HTML enhanced for web apps!',
+        'description': 'WebDev.AngularJS.DESC',
         'logo': 'angular.png'
       },
       {
-        'title': 'BrowserSync',
+        'title': 'WebDev.BrowserSync.TITLE',
         'url': 'http://browsersync.io/',
-        'description': 'Time-saving synchronised browser testing.',
+        'description': 'WebDev.BrowserSync.DESC',
         'logo': 'browsersync.png'
       },
       {
-        'title': 'GulpJS',
+        'title': 'WebDev.GulpJS.TITLE',
         'url': 'http://gulpjs.com/',
-        'description': 'The streaming build system.',
+        'description': 'WebDev.GulpJS.DESC',
         'logo': 'gulp.png'
       },
       {
-        'title': 'Jasmine',
+        'title': 'WebDev.Jasmine.TITLE',
         'url': 'http://jasmine.github.io/',
-        'description': 'Behavior-Driven JavaScript.',
+        'description': 'WebDev.Jasmine.DESC',
         'logo': 'jasmine.png'
       },
       {
-        'title': 'Karma',
+        'title': 'WebDev.Karma.TITLE',
         'url': 'http://karma-runner.github.io/',
-        'description': 'Spectacular Test Runner for JavaScript.',
+        'description': 'WebDev.Karma.DESC',
         'logo': 'karma.png'
       },
       {
-        'title': 'Protractor',
+        'title': 'WebDev.Protractor.TITLE',
         'url': 'https://github.com/angular/protractor',
-        'description': 'End to end test framework for AngularJS applications built on top of WebDriverJS.',
+        'description': 'WebDev.Protractor.DESC',
         'logo': 'protractor.png'
       }
     ];

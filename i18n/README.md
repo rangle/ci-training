@@ -271,12 +271,57 @@ There is not really _that_ much different between the ICU capable demo, and the
 basic demo in terms of JavaScript. The differences are really in the way the
 HTML messages are formatted.
 
+## Internationalizing/Localizing an Existing Project
 
+This process will assume that there is currently little to no i18n, or l10n
+implemented in a given project.
+
+Existing projects that are _not_ internationalized will likely have _many_
+messages embedded directly in HTML.  For both simple, and complex translation
+cases those texts are going to migrate into JSON files.
+
+These JSON files should ideally be stored under a common "locales" directory,
+and they should be labelled `locale-{{locale}}.json`.  For example, French
+Canadian would be `locale-fr_CA.json`, and English would be
+`locale-en_CA.json`.
+
+These locale JSON files can be extremely simple, with a unique attribute for
+each message, or name-spaced by feature.  This document will assume that 
+local JSON's are name-spaced by feature.
+
+Localized JSON files will also need to be built into the project so that they
+can be used.  There is a gulp plugin for this, `gulp-angular-translate`.
+
+In order to better explain this workflow, there is a [project][projectPre] that
+is converted into an [i18n project][projectSimple]
+
+In order to translate the sample project:
+
+- a `locales` directory is added under `src/assets`
+- Every HTML partial in the project with translatable language has that
+language replaced with a `{{ KEY | translate }}` expression, where `KEY` is a
+unique identifier.  The original text is placed in a JSON file using the `KEY`
+attribute.
+- a new config block is added to `src/app/index.config.js`
+- any third party libraries need to be plugged into angular-translate's events
+so that they can be informed of the change
+- (optional) generate gibberish language for testing
+- (optional) language selector directive
+- (optional) locally saving language selection
+- (optional) remotely saving language selection
+
+This results of this process, including generating gibberish, and real time
+language selection can bee seen in [this sample project][projectSimple]
+
+
+
+[projectSimple]:./workshop-post-translate-simple "Project After Simple Translations"
+[projectPre]:./workshop-pre-translate "Project Before Translation"
 [cdnAtimf]:https://cdnjs.cloudflare.com/ajax/libs/angular-translate-interpolation-messageformat/2.8.1/angular-translate-interpolation-messageformat.js "Angular Translate Interpolation Message Format CDN"
 [cdnAmf]:https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-message-format.js "Angular Message Format Wrapper CDN"
 [cdnMf]:https:https://cdn.rawgit.com/SlexAxton/messageformat.js/0.2.2/messageformat.js "Message Format CDN"
 [cdnAt]:https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.8.1/angular-translate.js "Angular Translate CDN"
 [icu]:http://site.icu-project.org/ "International Components For Unicode"
-[demoGender]:http://krebsonsecurity.com/2011/08/beware-of-juice-jacking/ "Gender based example"
+[demoGender]:http://codepen.io/bennett000/pen/OyevPL "Gender based example"
 [demoBasic]:http://codepen.io/bennett000/pen/PPrEve/ "Simple English/French Angular Translate Example"
 [ngTranslate]:https://github.com/angular-translate/angular-translate "Angular Translate Module"
