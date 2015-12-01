@@ -46,16 +46,20 @@ Consider the following:
     Spanish  | Ponga el interruptor de alimentación de corriente en 0.| 55 chars | 112% more characters
 
 
-## i18n in Angular (1.4+)
+## i18n in Angular 1.x
 
-- Starts, and ends with HTML templates, and JSON
-- Can be done dynamically (no page reloads)
+Angular has attempted to support i18n/i10n in some form or another since the
+early days.  In that time support has evolved.  The defacto standard, and soon
+to be official standard for i18n support in Angular is 
+[Angular Translate][ngTranslate] which is only compatible with Angular >= 1.4.x.  
+
+Angular Translate has a few major features:
+
+- Translation be done dynamically (no page reloads)
 - Styles can be tested _while_ translators translate
-
-Angular version 1.4x features a module called [Angular Translate][ngTranslate]
-which adds a robust translation workflow to Angular. The Angular Translate
-workflow looks like
+- Supports complex ICU message formats
   
+Angular translate's workflow looks like so:
   
 ![Angular Translate Workflow](img/i18n-process.png "i18n Workflow")
 
@@ -80,7 +84,7 @@ same as monolingual HTML.  There are a variety of reasons for this:
 - Translators require _context_ in order to produce high quality translations
 
 Before proceeding the angular-translate JavaScript will need to be added to
-a project. This can be done through `npm`, or through a [cdn][cdnAt]
+a project. This can be done through `npm`, `bower`, or through a [cdn][cdnAt]
 
 Here is some HTML, and JS for a [simple Angular translate demo][demoBasic],
 HTML:
@@ -307,12 +311,177 @@ attribute.
 so that they can be informed of the change
 - (optional) generate gibberish language for testing
 - (optional) language selector directive
-- (optional) locally saving language selection
-- (optional) remotely saving language selection
+
 
 This results of this process, including generating gibberish, and real time
 language selection can bee seen in [this sample project][projectSimple]
 
+### Assets/Locales
+
+When the text in HTML partials is extracted, it is placed in JSON files in this
+folder.  Strictly speaking this folder could be named anything so long as the
+angular translate package is informed.
+
+Each file in this folder _should_ be named in the format: 
+`locale-{{locale}}.json`, although the angular-translate package will allow
+for a variety of manual overrides.
+
+### New Config Block
+
+The new config block works just like the config blocks in the CodePen examples.
+In the workshop project the config block is added to `index.config.js`, and the
+config function looks like:
+
+```js
+
+  function translations($translateProvider) {
+    // this tells angular translate how to sanitize translation strings
+    $translateProvider.useSanitizeValueStrategy('escape');
+
+    // this tells angular-translate where to look for files
+    $translateProvider.useStaticFilesLoader({
+      prefix: 'assets/locales/locale-',
+      suffix: '.json'
+    });
+
+    // automatically determine preferred language
+    $translateProvider.determinePreferredLanguage();
+
+    // allow for locale fallbacks
+    $translateProvider.registerAvailableLanguageKeys(['fr', 'en'], {
+      'fr_ca': 'fr',
+      'fr_fr': 'fr',
+      'fr_ch': 'fr',
+      'en_US': 'en',
+      'en_GB': 'en',
+      'en_CA': 'en'
+    });
+  }
+```
+
+### Third Party Library Hooks
+
+The workshop project has an external library called "moment" that is responsible
+for date manipulation.  Dates are highly localized, and the moment library is so
+advanced that it even creates date range strings like "3 days ago".  These
+strings clearly need to be translated.
+
+Fortunately moment has great i18n support, and angular translate has events. In
+the workshop project `index.run.js` is modified to look like so:
+
+```js
+
+  /** @ngInject */
+  function runBlock($log, $rootScope, moment) {
+
+    $log.debug('runBlock end');
+
+    // This is the relevant bit
+    // When angular-translate triggers a `$translateChangeStart` event 
+    // moment will now attempt to set its locale to the new locale
+    $rootScope.$on('$translateChangeStart', function (event, lang) {
+      moment.locale(lang);
+    });
+  }
+
+```
+
+
+### Generating Gibberish For Testing
+
+If an application is being translated for the first time, there is a good chance
+the translators do not work on site, and will not receive the text right away.
+Due to the nature of the translation workflow the code has already been prepared
+for translation at this point.
+
+Instead of waiting to get a translation back, only to find out that it breaks
+existing styles, developers can use a package called 
+"pseudo-translate-angular-json", which has a gulp version
+"gulp-pseudo-translate-angular-json".  To get this working with the workshop
+project a new file `pseudo-translate.js` is added to the gulp folder.  This file
+looks like:
+
+```js
+
+var gulp = require('gulp');
+var pseudoTranslator = require('gulp-pseudo-translate-angular-json');
+var jeditor = require('gulp-json-editor');
+var rename = require('gulp-rename');
+
+gulp.task('i18n:pseudo', function() {
+  gulp.src('src/assets/locales/locale-en.json') // url to source file
+    .pipe(jeditor(function(json) {
+      return pseudoTranslator(json, {increasePercent: 50});
+    }))
+    .pipe(rename('locale-gb.json')) // destination file name
+    .pipe(gulp.dest('src/assets/locales/')); // destination folder
+});
+
+```
+
+This gulp task generates a translation, and names it `locale-es` which is a
+completely fabricated locale.  The upside of using a completely fabricated
+locale is that it will not conflict with any existing languages.  The downside
+is that it won't work with third party libraries, and it needs to be removed.
+
+
+### Language Selector Directive
+
+Angular translate can change languages in real time. In most cases the user
+should be the one changing languages, and for that to happen they will need
+some sort of control.
+
+For the workshop a simple select drop down is used.  For this a new component
+is added to the workshop project.  It has HTML that looks like:
+
+```html
+
+
+<nav class="locale-selector">
+  <select ng-model="vm.current" ng-change="vm.change(vm.current)">
+    <option value="en">{{ 'Locale.EN' | translate }}</option>
+    <option value="gb">{{ 'Locale.GB' | translate }}</option>
+  </select>
+</nav>
+
+```
+
+There is also a corresponding directive that looks like:
+
+```js
+
+  angular
+    .module('workshop')
+    .directive('localeSelector', localeSelector);
+
+  /** @ngInject */
+  function localeSelector() {
+    var directive = {
+      restrict: 'E',
+      templateUrl: 'app/components/localeSelector/localeSelector.html',
+      scope: {
+          creationDate: '='
+      },
+      controller: LocaleSelectorController,
+      controllerAs: 'vm',
+      bindToController: true
+    };
+
+    return directive;
+
+    /** @ngInject */
+    function LocaleSelectorController($translate) {
+      var vm = this;
+
+      vm.current = $translate.use();
+      vm.change = $translate.use.bind($translate);
+    }
+  }
+  
+```
+
+This directive creates a translated list of languages, and when the drop down
+changes, the `$translate` service changes locales.
 
 
 [projectSimple]:./workshop-post-translate-simple "Project After Simple Translations"

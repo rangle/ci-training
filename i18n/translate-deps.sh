@@ -9,8 +9,7 @@
 ##
 
 # Required for basic, and advanced translation
-npm install --save gulp-angular-translate gulp-angular-translate-extract \
-angular-translate
+npm install --save gulp-angular-translate angular-translate
 
 ## Required for advanced translation
 npm install --save angular-message-format messageformat \
