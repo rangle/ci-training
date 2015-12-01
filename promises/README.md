@@ -497,18 +497,19 @@ function fetchFromServer(resource) {
 
 // This try/catch is an example of what *not* to do
 try {
-    fetchFromServer('friendList').
-    then(function () {
+    fetchFromServer('friendList')
+    .then(function () {
         throw new Error('test error message');
-    }).
-    then(function (result) {
+    })
+    .then(function (result) {
         // this will never run
         return result;
-    }).
-    then(function () {
+    })
+    .then(function () {
         // this will never run
         return result;
-    }, function (err) {
+    })
+    .then(null, function (err) {
        console.log(err.message); // will output "test error message"
     });
 } catch (err) {
@@ -591,9 +592,11 @@ The JavaScript looks like:
           vm.no = function() {
             reject(new Error('Do Not Proceed'));
           };
-        }).then(function() {
+        })
+        .then(function() {
           resetModal();
-        }, function(err) {
+        })
+        .then(null, function(err) {
           resetModal();
           throw err;
         });
@@ -614,8 +617,8 @@ The JavaScript looks like:
       vm.remove = remove;
 
       function remove(el) {
-        modalService.doModal('Really Delete "' + el + '"?').
-        then(function() {
+        modalService.doModal('Really Delete "' + el + '"?')
+        .then(function() {
           vm.favourites = vm.favourites.filter(function(fave) {
             if (fave === el) {
               return false;
