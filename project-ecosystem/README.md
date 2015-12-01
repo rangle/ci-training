@@ -263,7 +263,7 @@ Run the angular generator and customize the scaffolding based on it's questions.
 yo gulp-angular
 ```
 
-![gulp-angular questions](https://github.com/kosz/ci-training/blob/project-ecosystem/project-ecosystem/images/gulp-angular.png)
+![gulp-angular questions](images/gulp-angular.png)
 
 Once the generator has finished, the project scaffolding is ready. The `angular-project` can now be opened in an editor/IDE and the server can be fired up by running:
 
@@ -338,7 +338,7 @@ Let's start out simple. Assuming that `gulp serve` is running, the text `Allo' A
 
 You may notice that as the file is saved, the browser automatically reloads the page. This is because `gulp serve` is the development mode of the server, and it provides live reload, which reloads the page automatically after every single file change. This can be a powerful productivity tool when the browser and editor are both visible at the same time.
 
-![Live Reload](https://github.com/kosz/ci-training/blob/project-ecosystem/project-ecosystem/images/live-reload.png)
+![Live Reload](images/live-reload.png)
 - [Demo Video](http://quick.as/l8ygfxajv)
 - [Commit Diff](https://github.com/rangle/ci-gulp-angular/commit/7efcedd61bf8078df4b21fdee2b7c71842ad5f46)
 - Checking out this version of the commit from the project's root: `git checkout 7efcedd61bf8078df4b21fdee2b7c71842ad5f46`
@@ -499,11 +499,11 @@ https://github.com/rangle/ci-gulp-angular/blob/master/src/index.html
 
 `.tmp/index.html` - development mode
 
-![Running](https://raw.githubusercontent.com/kosz/ci-training/project-ecosystem/project-ecosystem/images/index-html-unminified.png?token=AAFQhvx9XloelNZH8DUNSPLB4BRaL1tCks5WZcMDwA%3D%3D)
+![Running](images/index-html-unminified.png)
 
 `dist/index.html` - production mode
 
-![Running](https://raw.githubusercontent.com/kosz/ci-training/project-ecosystem/project-ecosystem/images/index-html-minified.png?token=AAFQhpmduRb5KlBn3IC0AJGJ7sDrMh-kks5WZcMXwA%3D%3D)
+![Running](images/index-html-minified.png)
 
 #### Changing to Mocha and Chai for testing
 
@@ -561,7 +561,7 @@ describe('timeNowController', function () {
 
 In development mode `gulp serve` and `gulp test:auto` can be ran in parallel. The browser window should also be visible. In this fashion the developer gets instant feedback on any code changes, and can spot buggs right when they occur.
 
-![Instant Feedback](https://github.com/kosz/ci-training/blob/project-ecosystem/project-ecosystem/images/instant-feedback.png)
+![Instant Feedback](images/instant-feedback.png)
 
 #### Adding Circle CI
 
@@ -596,22 +596,22 @@ With the needed environment config, we can now tell Circle CI to build the proje
 **1.** Login to Circle CI with a github account which can access the repo
 **2.** Click on the Add project button
 
-![Add Project](https://raw.githubusercontent.com/kosz/ci-training/project-ecosystem/project-ecosystem/images/ci-add_button.png?token=AAFQhkRouzKnZaCr9HkuGVJa6QVai97Cks5WZbXtwA%3D%3D)
+![Add Project](images/ci-add_button.png)
 
 **3**. Select the github account that the project can be found on, and click on build project
 
-![Add Project](https://raw.githubusercontent.com/kosz/ci-training/project-ecosystem/project-ecosystem/images/select-repo.png?token=AAFQhjV3c0188g7-laHJR8qVT8e97_lSks5WZbYcwA%3D%3D)
+![Add Project](images/select-repo.png)
 
 **4.** Wait for the build to finish. The project has CI server integration now. Every PR and merge will automatically the CI server to run all tests and report back through the github interface.
 
 Build list in Circle CI
-![Running](https://raw.githubusercontent.com/kosz/ci-training/project-ecosystem/project-ecosystem/images/ci-running.png?token=AAFQhmz1RnoSbR9AeKhcpijUCgZnKrPRks5WZbY8wA%3D%3D)
+![Running](images/ci-running.png)
 
 CI Fail Message on Github
-![Running](https://raw.githubusercontent.com/kosz/ci-training/project-ecosystem/project-ecosystem/images/git-ci-fail.png?token=AAFQhrYyRZsAgLdYKzGfzGH0CmPLNY7qks5WZbaLwA%3D%3D)
+![Running](images/git-ci-fail.png)
 
 CI Run Information on Circle CI
-![Running](https://raw.githubusercontent.com/kosz/ci-training/project-ecosystem/project-ecosystem/images/ci-fail.png?token=AAFQhmjkJQKZFR10nrvsSezFeWXEuNiPks5WZbahwA%3D%3D)
+![Running](images/ci-fail.png)
 
 - [Commit Diff](https://github.com/rangle/ci-gulp-angular/commit/854ed8202e52ed230acec7684abfd66e809653ab)
 - Checking out this version of the commit from the project's root: `git checkout 854ed8202e52ed230acec7684abfd66e809653ab`
