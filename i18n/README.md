@@ -1,6 +1,25 @@
 Internationalization, and Localization
 ======================================
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Internationalization, and Localization](#internationalization-and-localization)
+  - [i18n Complexity](#i18n-complexity)
+  - [i18n in Angular 1.x](#i18n-in-angular-1x)
+    - [i18n Angular HTML Templates](#i18n-angular-html-templates)
+- [{{ 'TITLE' | translate }}](#-title--translate-)
+- [{{ 'TITLE' | translate }}](#-title--translate--1)
+  - [Internationalizing/Localizing an Existing Project](#internationalizinglocalizing-an-existing-project)
+    - [Assets/Locales](#assetslocales)
+    - [New Config Block](#new-config-block)
+    - [Third Party Library Hooks](#third-party-library-hooks)
+    - [Generating Gibberish For Testing](#generating-gibberish-for-testing)
+    - [Language Selector Directive](#language-selector-directive)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 - i18n is short for internationalization.  The 18 represents the number of 
 characters in the word "internationalization" that are between the first "i",
 and the last "n"

@@ -1,6 +1,22 @@
 JavaScript Promises
 ===================
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [JavaScript Promises](#javascript-promises)
+  - [The Future In JavaScript](#the-future-in-javascript)
+  - [Events](#events)
+  - [Callbacks](#callbacks)
+  - [Promises](#promises)
+  - [Working With Promises](#working-with-promises)
+  - [Error Handling](#error-handling)
+  - [Real world examples](#real-world-examples)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+
 Promises, sometimes called futures are a programming pattern that JavaScript
 borrowed from other languages.  Promises help programmers reason about values
 that are not available until some point in the future.
