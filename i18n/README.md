@@ -9,8 +9,6 @@ Internationalization, and Localization
   - [i18n Complexity](#i18n-complexity)
   - [i18n in Angular 1.x](#i18n-in-angular-1x)
     - [i18n Angular HTML Templates](#i18n-angular-html-templates)
-- [{{ 'TITLE' | translate }}](#-title--translate-)
-- [{{ 'TITLE' | translate }}](#-title--translate--1)
   - [Internationalizing/Localizing an Existing Project](#internationalizinglocalizing-an-existing-project)
     - [Assets/Locales](#assetslocales)
     - [New Config Block](#new-config-block)
