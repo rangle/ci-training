@@ -435,7 +435,7 @@ gulp.task('i18n:pseudo', function() {
 
 ```
 
-This gulp task generates a translation, and names it `locale-es` which is a
+This gulp task generates a translation, and names it `locale-gb` which is a
 completely fabricated locale.  The upside of using a completely fabricated
 locale is that it will not conflict with any existing languages.  The downside
 is that it won't work with third party libraries, and it needs to be removed.
