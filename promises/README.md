@@ -543,13 +543,13 @@ with a promise.  The HTML looks like:
 
 ```html
 
-<div ng-app="modalPromiseDemo" ng-controller="PromiseDemo as pd">
-  <div ng-show="pd.isModalVisible">
-    <div>Are you sure you wish to delete "{{ pd.modalFave }}"</div>
-    <input type="button" value="No" ng-click="pd.modalNo()" />
-    <input type="button" value="Yes" ng-click="pd.modalYes()" />
+<div ng-app="modalPromiseDemo" ng-controller="ModalDialogue as modal">
+  <div ng-show="modal.service.isVisible">
+    <div>{{ modal.service.text }}</div>
+    <input type="button" value="No" ng-click="modal.service.no()" />
+    <input type="button" value="Yes" ng-click="modal.service.yes()" />
   </div>
-  <div ng-show="!pd.isModalVisible">
+  <div ng-show="!modal.service.isVisible" ng-controller="PromiseDemo as pd">
     <div>Add items to a list</div>
     <input type="text" ng-model="pd.input" />
     <input type="button" value="add" ng-click="pd.add(pd.input)" />
@@ -569,31 +569,28 @@ The JavaScript looks like:
 
     angular.module('modalPromiseDemo', []).
 
-    controller('PromiseDemo', function($q, $timeout) {
-      var vm = this,
-        currentTimeout = null;
-      vm.favourites = [];
-      vm.input = null;
-      vm.add = add;
-      vm.isDuplicate = false;
-      vm.remove = remove;
+    service('modalService', function($q) {
+      var vm = this;
+
+      vm.doModal = doModal;
       resetModal();
 
       function resetModal() {
-        vm.isModalVisible = false;
-        vm.modalFave = null;
-        vm.modalYes = angular.noop;
-        vm.modalNo = angular.noop;
+        vm.isVisible = false;
+        vm.text = null;
+        vm.yes = angular.noop;
+        vm.no = angular.noop;
       }
 
-      function doModal(value) {
-        vm.isModalVisible = true;
-        vm.modalFave = value;
+      function doModal(text) {
+        console.log('doModal');
+        vm.isVisible = true;
+        vm.text = text;
         return $q(function(resolve, reject) {
-          vm.modalYes = resolve;
-          vm.modalNo = function() {
+          vm.yes = resolve;
+          vm.no = function() {
             reject(new Error('Do Not Proceed'));
-          }
+          };
         }).then(function() {
           resetModal();
         }, function(err) {
@@ -601,15 +598,32 @@ The JavaScript looks like:
           throw err;
         });
       }
+    }).
+
+    controller('ModalDialogue', function(modalService) {
+      this.service = modalService;
+    }).
+
+    controller('PromiseDemo', function($timeout, modalService) {
+      var vm = this,
+        currentTimeout = null;
+      vm.favourites = [];
+      vm.input = null;
+      vm.add = add;
+      vm.isDuplicate = false;
+      vm.remove = remove;
 
       function remove(el) {
-        doModal(el).then(function() {
+        modalService.doModal('Really Delete "' + el + '"?').
+        then(function() {
           vm.favourites = vm.favourites.filter(function(fave) {
             if (fave === el) {
               return false;
             } else {
               return true;
             }
+          }, function () {
+             // display a message? 
           })
         });
       }
@@ -631,5 +645,14 @@ The JavaScript looks like:
     });
 ```
 
+In the above example there is a modal service that controls the state associated
+with a modal window.  This service has a promise returning `doModal` function.
 
-[modalPromise]:http://codepen.io/bennett000/pen/ZQzEWB "modal promise"
+When `doModal` is called, a modal dialogue takes over the screen.  The
+demo controller has no knowledge of how modals work, other than the fact that it
+can give the modal text to display, and that it _eventually_ knows when the
+user has made a choice.
+
+
+[selectPromise]:http://codepen.io/bennett000/pen/RrbNXp "dependent select boxes demo"
+[modalPromise]:http://codepen.io/bennett000/pen/ZQzEWB "modal promise demo"
