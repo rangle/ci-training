@@ -518,6 +518,103 @@ big difference with network requests. In many cases network requests can end up
 depending on results from _previous_ network requests, and traditional callback
 models make this complex to deal with.
 
-Another area where promises can come
+Another area where promises come in handy is with modal dialogues.  In many
+applications it is necessary to prompt the user for some sort of input, and do
+something when they provide input.  Promises can really help simplify the way
+programmers wait for this input.
+
+Here is a very [simple example][modalPromise] of a modal dialogue implemented
+with a promise.  The HTML looks like:
+
+```html
+
+<div ng-app="modalPromiseDemo" ng-controller="PromiseDemo as pd">
+  <div ng-show="pd.isModalVisible">
+    <div>Are you sure you wish to delete "{{ pd.modalFave }}"</div>
+    <input type="button" value="No" ng-click="pd.modalNo()" />
+    <input type="button" value="Yes" ng-click="pd.modalYes()" />
+  </div>
+  <div ng-show="!pd.isModalVisible">
+    <div>Add items to a list</div>
+    <input type="text" ng-model="pd.input" />
+    <input type="button" value="add" ng-click="pd.add(pd.input)" />
+    <div ng-class="invalid" ng-if="pd.isDuplicate">
+      Sorry No Duplicates
+    </div>
+    <div ng-repeat="fave in pd.favourites">
+      <div><span class="clickable" ng-click=pd.remove(fave)>x</span>{{ fave }}</div>
+    </div>
+  </div>
+</div>
+```
+
+The JavaScript looks like:
+
+```js
+
+    angular.module('modalPromiseDemo', []).
+
+    controller('PromiseDemo', function($q, $timeout) {
+      var vm = this,
+        currentTimeout = null;
+      vm.favourites = [];
+      vm.input = null;
+      vm.add = add;
+      vm.isDuplicate = false;
+      vm.remove = remove;
+      resetModal();
+
+      function resetModal() {
+        vm.isModalVisible = false;
+        vm.modalFave = null;
+        vm.modalYes = angular.noop;
+        vm.modalNo = angular.noop;
+      }
+
+      function doModal(value) {
+        vm.isModalVisible = true;
+        vm.modalFave = value;
+        return $q(function(resolve, reject) {
+          vm.modalYes = resolve;
+          vm.modalNo = function() {
+            reject(new Error('Do Not Proceed'));
+          }
+        }).then(function() {
+          resetModal();
+        }, function(err) {
+          resetModal();
+          throw err;
+        });
+      }
+
+      function remove(el) {
+        doModal(el).then(function() {
+          vm.favourites = vm.favourites.filter(function(fave) {
+            if (fave === el) {
+              return false;
+            } else {
+              return true;
+            }
+          })
+        });
+      }
+
+      function add(el) {
+        if (vm.favourites.indexOf(el) === -1) {
+          vm.favourites.push(el);
+          vm.input = null;
+        } else {
+          if (currentTimeout) {
+            $timeout.cancel(currentTimeout);
+          }
+          vm.isDuplicate = true;
+          currentTimeout = $timeout(function() {
+            vm.isDuplicate = false;
+          }, 3000);
+        }
+      }
+    });
+```
 
 
+[modalPromise]:http://codepen.io/bennett000/pen/ZQzEWB "modal promise"
