@@ -641,8 +641,8 @@ One of the greatest confusions in Angular is when to use a service and when to u
 - the angular **factory** function however does provide certain benefits such as the ability to return a single function
 
 ```js
-angular.factory('myRestfulFactory', function($http, ciApiUrl, entity) {
-  return function () {
+angular.factory('myRestfulFactory', function($http, ciApiUrl) {
+  return function (entity) {
     var url = ciApiUrl + '/' + entity;
 
     return {
