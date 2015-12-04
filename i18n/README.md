@@ -4,13 +4,18 @@ Internationalization, and Localization
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Internationalization, and Localization](#internationalization-and-localization)
   - [i18n Complexity](#i18n-complexity)
   - [i18n in Angular 1.x](#i18n-in-angular-1x)
     - [i18n Angular HTML Templates](#i18n-angular-html-templates)
+- [{{ 'TITLE' | translate }}](#-title--translate-)
+- [{{ 'TITLE' | translate }}](#-title--translate--1)
+    - [Custom Locale Filters](#custom-locale-filters)
+    - [Large Bodies of HTML](#large-bodies-of-html)
   - [Internationalizing/Localizing an Existing Project](#internationalizinglocalizing-an-existing-project)
     - [Assets/Locales](#assetslocales)
+    - [Adding The Translation, and Locale Modules](#adding-the-translation-and-locale-modules)
     - [New Config Block](#new-config-block)
+    - [Dynamic Locale Library Hook](#dynamic-locale-library-hook)
     - [Third Party Library Hooks](#third-party-library-hooks)
     - [Generating Gibberish For Testing](#generating-gibberish-for-testing)
     - [Language Selector Directive](#language-selector-directive)
@@ -391,8 +396,8 @@ local JSON's are name-spaced by feature.
 Localized JSON files will also need to be built into the project so that they
 can be used.  There is a gulp plugin for this, `gulp-angular-translate`.
 
-In order to better explain this workflow, there is a [project][projectPre] that
-is converted into an [i18n project][projectSimple]
+In order to better explain this workflow, there is a project that is converted 
+into an [i18n project][projectSimple]
 
 In order to translate the sample project:
 
@@ -642,8 +647,7 @@ This directive creates a translated list of languages, and when the drop down
 changes, the `$translate` service changes locales.
 
 
-[projectSimple]:./workshop-post-translate-simple "Project After Simple Translations"
-[projectPre]:./workshop-pre-translate "Project Before Translation"
+[projectSimple]:https://github.com/rangle/ci-i18n-angular "Project After Simple Translations"
 [cdnAtimf]:https://cdnjs.cloudflare.com/ajax/libs/angular-translate-interpolation-messageformat/2.8.1/angular-translate-interpolation-messageformat.js "Angular Translate Interpolation Message Format CDN"
 [cdnAmf]:https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-message-format.js "Angular Message Format Wrapper CDN"
 [cdnMf]:https:https://cdn.rawgit.com/SlexAxton/messageformat.js/0.2.2/messageformat.js "Message Format CDN"
