@@ -65,3 +65,27 @@ function Server(networkService, authService, $q) {
 
 }
 ```
+
+### Auth Precondition
+
+```js
+ function waitForPreconditions() {
+    var token = checkLocalStorageForAuthToken();
+    if (token) {
+      return $q.when(token);
+    } else {
+      return user.whenAuthenticated();
+    }
+  }
+
+  service.get = function (path) {
+    return waitForPreconditions()
+      .then(() => {
+        return $http
+          .get(API_BASE_URL + path, getConfig(config))
+          .then((response) => handleSuccess(response))
+          .then({}, (response) => handleFailure(response));
+      })
+    }
+  };
+```
