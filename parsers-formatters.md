@@ -63,4 +63,4 @@ Create a directive which both parses and formats the value of `ngModel`. The use
 
 2. Conversely, if you set the model to an array then the input should appear as a string of comma separated values.
 
-🔗 **Solution:** [codepen.io/winkerVSbecks/pen/KdjzaK](http://codepen.io/winkerVSbecks/pen/KdjzaK?editors=001)
+🔗 **Solution:** [codepen.io/winkerVSbecks/pen/QjXEjK](http://codepen.io/winkerVSbecks/pen/QjXEjK?editors=101)
